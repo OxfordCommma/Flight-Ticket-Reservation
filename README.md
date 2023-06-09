@@ -1,5 +1,5 @@
 # Flight Ticket Reservation System
-![Alternative](Verde Rojo Amarillo Simple y Minimalista Plan de Proyecto Presentación Empresarial.jpg)
+![Banner](photo.jpg)
 
 El proyecto 'Flight Ticket Reservation System' es una aplicación de creada mediante el lenguaje de programación Python que permite a los usuarios emular la reserva de vuelos y emitir tickets de manera sencilla y eficiente. La aplicación solicita los siguientes datos del usuario:
 
