@@ -4,16 +4,16 @@ from clase_vuelos import Vuelos
 class Usuario:
    
     def __init__(self):
-        self.nombre = input("Su nombre: ")
-        self.apellido = input("Su apellido: ")
-        self.mail = input("Su mail: ")
-        self.telefono = int(input("Su telefono: "))
-        self.dni = int(input("Su DNI: "))
+        self.nombre = input("Nombre: ")
+        self.apellido = input("Apellido: ")
+        self.mail = input("Correo electrónico: ")
+        self.telefono = int(input("Teléfono: "))
+        self.dni = int(input("Documento de Identidad: "))
     
-    def reservar_destino(self):
+    def reservar(self):
 
-        self.pais_salida = int(input("Indique el país de salida: \n1- Argentina\n2- Brasil\n3- Uruguay\n4- Peru\n5- Chile\n"))
-        self.pais_destino = int(input("Indique el país de destino: \n1- Argentina\n2- Brasil\n3- Uruguay\n4- Peru\n5- Chile\n"))
+        self.pais_salida = int(input("\n1- \033[33mArgentina\033[0m\n2- \033[32mBrasil\033[0m\n3- \033[36mUruguay\033[0m\n4- \033[31mPerú\033[0m\n5- \033[34mChile\033[0m\nIndique el país de salida: "))
+        self.pais_destino = int(input("Indique el país de destino: "))
 
         while self.pais_salida not in range(1,6):
             self.pais_salida = int(input("Valor desconocido: indique el país de salida: \n1- Argentina\n1- Brasil\n1- Uruguay\n1- Peru\n1- Chile"))
@@ -21,36 +21,35 @@ class Usuario:
             while self.pais_destino not in range(1,6):
                 self.pais_destino = int(input("Valor desconocido: indique el país de destino: \n1- Argentina\n1- Brasil\n1- Uruguay\n1- Peru\n1- Chile"))
         
-        gestor_de_vuelos_disponibles = Vuelos()
-        all_flights = list(gestor_de_vuelos_disponibles.muestra_vuelos(self.pais_salida, self.pais_destino))
+        gestor_vuelos = Vuelos()
+        dispo = list(gestor_vuelos.muestra_vuelos(self.pais_salida, self.pais_destino))
         
-        print("\nEstas son los vuelos disponibles que puede elegir segun sus criterios. Elija segun el orden dado:")
-        avl_flights_index = 1
-        self.saved_avl_flights = {}
-        for vuelo in all_flights:
-            self.saved_avl_flights[avl_flights_index] = vuelo
-            avl_flights_index += 1
-        for clave, valor in self.saved_avl_flights.items():
+        print("\nEstas son los vuelos disponibles que puede elegir segun sus criterios:")
+        index = 1
+        self.dispo_dicc = {}
+
+        for vuelo in dispo:
+            self.dispo_dicc[index] = vuelo
+            index += 1
+
+        for clave, valor in self.dispo_dicc.items():
             print(f"{clave} - {valor}")
         
-        #Cuando vuelvas, tratá de colocar a wished_flight dentro de def ultimos_pasos()
         def ultimos_pasos(): 
-            wished_flight = int(input("\nElija el número de vuelo que desea reservar: "))
+            dispo_elecc = int(input("\nElija el número de vuelo a reservar: "))
             while True:
-                if wished_flight in self.saved_avl_flights:
-                    asegura_vuelo = input(f"""¿Seguro que desea elegir el vuelo número {wished_flight} - {self.saved_avl_flights[wished_flight]}?
-                    Escriba 's' si desea confirmar su reserva, 'r' para elegir otro vuelo o 'n' para cancelar reserva: """)    
-                    if asegura_vuelo.lower() == "s":
-                        vuelo_elegido = self.saved_avl_flights[wished_flight]
-                        print(f"Perfecto, le mostramos los detalles del vuelo: opción nro {wished_flight},\nvuelo nro {vuelo_elegido[0]},\npaís partida {vuelo_elegido[1]},\npaís destino {vuelo_elegido[2]},\ncosto {vuelo_elegido[3]}\nasientos disponibles {vuelo_elegido[4]}.")
+                if dispo_elecc in self.dispo_dicc:
+                    dispo_elecc_conf = input(f"""\n¿Confirma el vuelo {dispo_elecc} - {self.dispo_dicc[dispo_elecc]}? Escriba 's' para confirmar reserva, 'r' para elegir otro vuelo o 'n' para cancelar reserva: """)    
+                    if dispo_elecc_conf.lower() == "s":
+                        vuelo_elegido = self.dispo_dicc[dispo_elecc]
                         break    
-                    elif asegura_vuelo.lower() == "r":
+                    elif dispo_elecc_conf.lower() == "r":
                         ultimos_pasos()    
-                    elif asegura_vuelo.lower() == "n":
+                    elif dispo_elecc_conf.lower() == "n":
                         print("Operación cancelada. No se ha realizado ninguna reserva.")
                         return "Operación cancelada"
                 else:
-                    repregunta = input("El número de vuelo elegido no está disponible. Desea reservar un vuelo? 's' para SI y 'n' para NO: ")
+                    repregunta = input("N° de vuelo elegido no disponible. ¿Desea reservar un vuelo? 's' para SI y 'n' para NO: ")
                     if repregunta.lower() == 's':
                         ultimos_pasos()
                     else:
@@ -63,10 +62,11 @@ class Usuario:
     def __str__(self):
         return [f"Usuario - {self.nombre} {self.apellido}, {self.mail}, {self.telefono}, {self.dni}"]
     
-    def resumen(self):
+    def comprar(self):
         self.diccionario = {1: 'Argentina', 2: 'Brasil', 3: 'Uruguay', 4: 'Perú', 5: 'Chile'}
-        self.a = self.reservar_destino()
-        self.ticket_resumen = f"Resumen del ticket\nUsuario - {self.nombre} {self.apellido}, {self.mail}, {self.telefono}, {self.dni} - {self.a}"
+        self.a = self.reservar()
+        print("\n------------------------------------------------------")
+        self.ticket_resumen = f"Resumen del ticket\nUsuario: {self.nombre} {self.apellido}\nCorreo Electronico: {self.mail}\nTelefono {self.telefono}\nDocumento de Identidad {self.dni}\nDetalles del Vuelo: {self.a}"
         return self.ticket_resumen
 
 
@@ -79,15 +79,16 @@ class Gestor_de_Tickets:
 
 
 class Menu:
-    
 
     def run(self):
         iniciador = 0
         while iniciador == 0:
-            created_user = Usuario()
+            print("Bienvenido al sitio de reservas de vuelo PyAirways\n\nIngrese sus datos")
+            usuario = Usuario()
             app_gestora = Gestor_de_Tickets()
-            app_gestora.lista_usuarios.append(created_user.__str__())
-            print(created_user.resumen())
+            app_gestora.lista_usuarios.append(usuario.__str__())
+            print(usuario.comprar())
+            print("------------------------------------------------------\n")
             iniciador = int(input("Ingrese 0 para crear un nuevo usuario y reservar, o 99 para salir: "))
 
 
